@@ -23,6 +23,7 @@
 
     - name: Create demos folder with demos
       command: cp -r /tmp/linklight/demos/ /home/{{ username }}/demos
+   
   when: networking
 
 # waiting on https://github.com/ansible/ansible/pull/41222
@@ -39,6 +40,13 @@
 - name: fix permissions of networking-workshop  (NETWORKING MODE)
   file:
     path: /home/{{ username }}/networking-workshop
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    recurse: yes
+    
+- name: fix permissions of demos  (NETWORKING MODE)
+  file:
+    path: /home/{{ username }}/demos
     owner: "{{ username }}"
     group: "{{ username }}"
     recurse: yes
