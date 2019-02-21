@@ -52,6 +52,12 @@
         delete_on_termination: true
   register: control_output
 
+- name: Assign AWS EIP to ansible node (control node)
+  ec2_eip:
+    device_id: "{{ control_output.instance_ids[0] }}"
+    region: "{{ ec2_region }}"
+    release_on_disassociation: yes
+
 - name: Ensure tags are present
   ec2_tag:
     region: "{{ ec2_region }}"
