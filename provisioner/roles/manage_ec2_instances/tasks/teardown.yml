@@ -24,6 +24,7 @@
     region: "{{ ec2_region }}"
     state: absent
     device_id: "{{ item.instance_id }}"
+    release_on_disassociation: yes
   loop: "{{ all_workshop_nodes.instances }}"
 
 
