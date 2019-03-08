@@ -19,6 +19,14 @@
   register: result
   when: all_workshop_nodes.instances
 
+- name: Explicitly delete EIPs after destroying instances
+  ec2_eip:
+    region: "{{ ec2_region }}"
+    state: absent
+    device_id: "{{ item.instance_id }}"
+  loop: "{{ all_workshop_nodes.instances }}"
+
+
 - name: Get the VPC ID for {{ ec2_name_prefix }}
   ec2_vpc_net_facts:
     filters:
