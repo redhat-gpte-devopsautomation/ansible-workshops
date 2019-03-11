@@ -21,7 +21,7 @@
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
-    device_id: "{{ item.instance_id }}"
+    device_id: "{{ item['instance_id'] }}"
     region: "{{ ec2_region }}"
     state: absent
     release_on_disassociation: yes
