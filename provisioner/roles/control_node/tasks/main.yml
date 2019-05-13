@@ -28,6 +28,14 @@
     state: latest
   when: not f5workshop
 
+- name: install ncclient for juniper devices (NETWORK AUTOMATION MODE)
+  become: yes
+  pip:
+    name:
+      - ncclient
+    state: latest
+  when: networking
+
 - name: block for f5workshop
   block:
     - name: install f5 workshop dependicies
