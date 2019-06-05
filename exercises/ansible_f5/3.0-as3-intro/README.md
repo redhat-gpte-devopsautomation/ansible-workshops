@@ -18,6 +18,8 @@ Demonstrate building a virtual server (exactly like the Section 1 Ansible F5 Exe
 
 # Guide
 
+#### Make sure the BIG-IP configuration is clean, run exercise 1.6-delete-configuration before proceeding
+
 ## Step 1:
 
 Make sure the F5 BIG-IP has AS3 enabled.  
@@ -38,7 +40,6 @@ Before starting to build a Playbook, its important to understand how AS3 works. 
 1. `tenant_base.j2`
 
 {% raw %}
-
 ```
 {
     "class": "AS3",
@@ -114,11 +115,12 @@ This template is a JSON representation of the Web Application.  The important pa
 **In Summary** the `tenant_base.j2` and `as3_template.j2` create one single JSON payload that represents a Web Application.  We will build a Playbook that will send this JSON payload to a F5 BIG-IP.
 
 **COPY THESE TEMPLATES TO YOUR WORKING DIRECTORY**
-
+{% raw %}
 ```
 mkdir j2
 cp ~/networking-workshop/3.0-as3-intro/j2/* j2/
 ```
+{% endraw %}
 
 ## Step 3:
 
@@ -129,9 +131,7 @@ Using your text editor of choice create a new file called `as3.yml`:
 ## Step 4:
 
 Enter the following play definition into `as3.yml`:
-
 {% raw %}
-
 ``` yaml
 ---
 - name: LINKLIGHT AS3
@@ -150,16 +150,21 @@ Enter the following play definition into `as3.yml`:
 - `gather_facts: false` disables facts gathering.  We are not using any fact variables for this playbook.
 
 This section from above...
+
+{% raw %}
 ```
   vars:
     pool_members: "{{ groups['webservers'] }}"
 ```
+{% endraw %}
+
 ...sets a variable named `pool_members`, to the webservers group.  There are two webservers on the workbench, `host1` and `host2`.  This means that the `pool_members` variable refers to a list of two webservers.
 
 ## Step 5
 
 **Append** the following to the as3.yml Playbook.  
 
+{% raw %}
 ```
   tasks:
 
@@ -167,6 +172,7 @@ This section from above...
     set_fact:
       as3_app_body: "{{ lookup('template', 'j2/as3_template.j2', split_lines=False) }}"
 ```
+{% endraw %}
 
 The module [set_fact module](https://docs.ansible.com/ansible/latest/modules/set_fact_module.html) allows a Playbook to create (or override) a variable as a task within a Play.  This can be used to create new facts on the fly dynamically that didn't exist until that point in the Play.  In this case the [template lookup plugin](https://docs.ansible.com/ansible/latest/plugins/lookup/template.html) is being used.  This task
   1. renders the j2/as3_template.j2 jinja template that is provided.
@@ -178,7 +184,6 @@ The module [set_fact module](https://docs.ansible.com/ansible/latest/modules/set
 **Append** the following to the as3.yml Playbook.  This task uses the uri module which is used to interact with HTTP and HTTPS web services and supports Digest, Basic and WSSE HTTP authentication mechanisms.  This module is extremely common and very easy to use.  The workshop itself (the Playbooks that provisioned the workbenches) uses the uri module to configure and license Red Hat Ansible Tower.
 
 {% raw %}
-
 ```
   - name: PUSH AS3
     uri:
@@ -194,9 +199,7 @@ The module [set_fact module](https://docs.ansible.com/ansible/latest/modules/set
       validate_certs: no
     delegate_to: localhost
 ```
-
 {% endraw %}
-
 
 Explanation of parameters:
 
@@ -238,14 +241,17 @@ The rest of the parameters are for authentication to the F5 BIG-IP and fairly st
 ## Step 7
 Run the playbook - exit back into the command line of the control host and execute the following:
 
+{% raw %}
 ```
 [student1@ansible ~]$ ansible-playbook as3.yml
 ```
+{% endraw %}
 
 # Playbook Output
 
 The output will look as follows.
 
+{% raw %}
 ```yaml
 [student1@ansible ~]$ ansible-playbook as3.yml
 
@@ -260,6 +266,7 @@ ok: [f5 -> localhost]
 PLAY RECAP *********************************************************************
 f5                         : ok=2    changed=0    unreachable=0    failed=0
 ```
+{% endraw %}
 
 # Solution
 

@@ -1,7 +1,7 @@
 ## This is needed for sshpass
 - name: Install EPEL
   yum:
-    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+    name: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
     state: present
 
 - name: Install base packages
@@ -20,6 +20,15 @@
   retries: 10
   delay: 5
 
+- name: UPGRADE PIP
+  pip:
+    name: pip
+    state: latest
+
+- name: UPGRADE SETUPTOOLS
+  pip:
+    name: setuptools
+    state: latest
 
 - name: Install base packages for netaddr
   yum:
@@ -34,7 +43,7 @@
     name:
       - ncclient
     state: latest
-  when: networking
+  when: networking | bool
 
 - name: block for f5workshop
   block:
@@ -55,7 +64,7 @@
           - bigsuds
           - netaddr
         state: latest
-  when: f5workshop
+  when: f5workshop | bool
 
 - name: Install ansible.cfg and vimrc in home directory
   template:
@@ -73,11 +82,11 @@
 
 - name: networking mode - setup control node
   include_tasks: "networking.yml"
-  when: networking
+  when: networking | bool
 
 - name: f5 mode - setup control node
   include_tasks: "networking.yml"
-  when: f5workshop
+  when: f5workshop | bool
 
 - name: engine (essentials) mode - setup control node
   include_tasks: "engine.yml"
@@ -92,19 +101,18 @@
     user: admin
     password: "{{admin_password}}"
     validate_certs: False
+    force_basic_auth: yes
   register: check_tower
   ignore_errors: yes
   when:
-    - ansible_os_family == 'RedHat'
     - towerinstall is defined
-    - towerinstall
+    - towerinstall | bool
 
 - name: install tower if knob is set
   include_tasks: "tower.yml"
   when:
-    - ansible_os_family == 'RedHat'
     - towerinstall is defined
-    - towerinstall
+    - towerinstall | bool
     - check_tower is failed
 
 - name: Ensure eula is accepted if posting license
@@ -118,7 +126,7 @@
   become: no
   when:
     - autolicense is defined
-    - autolicense
+    - autolicense | bool
 
 - name: Post license key
   uri:
@@ -132,8 +140,8 @@
     force_basic_auth: yes
   when:
     - autolicense is defined
-    - autolicense
+    - autolicense | bool
 
 - name: INSTALL VSCODE AND XRDP
   include_tasks: gui.yml
-  when: xrdp
+  when: xrdp | bool
