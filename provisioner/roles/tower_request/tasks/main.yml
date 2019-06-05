@@ -1,21 +1,21 @@
 ---
 - set_fact:
-    workshop_type: "Networking"
+    workshop_type: "networking"
   when:
     - networking is defined
-    - networking
+    - networking | bool
 
 - set_fact:
     workshop_type: "F5"
   when:
     - f5workshop is defined
-    - f5workshop
+    - f5workshop | bool
 
 - set_fact:
     workshop_type: "Linux"
   when:
-    - f5workshop is not defined
-    - networking is not defined
+    - workshop_type is not match("F5")
+    - workshop_type is not match("networking")
 
 - name: execute a command with tower
   uri:
