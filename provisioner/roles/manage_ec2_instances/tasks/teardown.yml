@@ -26,7 +26,7 @@
     region:         "{{ ec2_region }}"
     instance_ids:   "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
     state:          absent
-    wait:           true
+    wait:           yes
     wait_timeout:   300
   register: result
   when: all_workshop_nodes.instances
