@@ -40,7 +40,7 @@
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
-    device_id:                  "{{ item.item['instance_id'] }}"
+    #    device_id:                  "{{ item.item['instance_id'] }}"
     public_ip:                  "{{ item.item['public_ip_address'] }}"
     region:                     "{{ ec2_region }}"
     state:                      absent
