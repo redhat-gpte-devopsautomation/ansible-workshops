@@ -23,12 +23,13 @@
 
 - name: destroy EC2 instances
   ec2:
-    region: "{{ ec2_region }}"
-    state: absent
-    instance_ids: "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
+    region:         "{{ ec2_region }}"
+    instance_ids:   "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
+    state:          absent
+    wait:           true
+    wait_timeout:   300
   register: result
   when: all_workshop_nodes.instances
-
 
 - name: DEBUG Output eips
   debug:
