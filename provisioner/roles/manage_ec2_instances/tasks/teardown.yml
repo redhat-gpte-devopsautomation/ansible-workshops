@@ -7,7 +7,7 @@
       "tag:Workshop": "{{ec2_name_prefix}}"
   register: all_workshop_nodes
 
-- name: Debug ec2_instance register
+- name: DEBUG ec2_instance register
   debug:
     var: all_workshop_nodes
     verbosity: 2
@@ -21,16 +21,6 @@
   loop: "{{ all_workshop_nodes.instances }}"    
   register: r_all_workshop_eips
 
-- name: destroy EC2 instances
-  ec2:
-    region:         "{{ ec2_region }}"
-    instance_ids:   "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
-    state:          absent
-    wait:           yes
-    wait_timeout:   300
-  register: result
-  when: all_workshop_nodes.instances
-
 - name: DEBUG Output eips
   debug:
     msg: 
@@ -40,13 +30,22 @@
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
-    #    device_id:                  "{{ item.item['instance_id'] }}"
+    device_id:                  "{{ item.item['instance_id'] }}"
     public_ip:                  "{{ item.item['public_ip_address'] }}"
     region:                     "{{ ec2_region }}"
     state:                      absent
     release_on_disassociation:  yes
   loop: "{{ r_all_workshop_eips.results }}"
 
+- name: destroy EC2 instances
+  ec2:
+    region:         "{{ ec2_region }}"
+    instance_ids:   "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
+    state:          absent
+    wait:           yes
+    wait_timeout:   300
+  register: result
+  when: all_workshop_nodes.instances
 
 - name: Get the VPC ID for {{ ec2_name_prefix }}
   ec2_vpc_net_facts:
