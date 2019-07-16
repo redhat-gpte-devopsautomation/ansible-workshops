@@ -21,12 +21,12 @@
   loop: "{{ all_workshop_nodes.instances }}"    
   register: r_all_workshop_eips
 
-- name: DEBUG Output eips
-  debug:
-    msg: 
-    - "{{ item.item['public_ip_address'] }}"
-    verbosity: 2
-  loop: "{{ r_all_workshop_eips.results }}"
+#- name: DEBUG Output eips
+#  debug:
+#    msg: 
+#    - "{{ item.item['public_ip_address'] }}"
+#    verbosity: 2
+#  loop: "{{ r_all_workshop_eips.results }}"
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
