@@ -28,14 +28,6 @@
 #    verbosity: 2
 #  loop: "{{ r_all_workshop_eips.results }}"
 
-- name: Forcibly delete EIPs after destroying instances
-  ec2_eip:
-    device_id:                  "{{ item.item['instance_id'] }}"
-    public_ip:                  "{{ item.item['public_ip_address'] }}"
-    region:                     "{{ ec2_region }}"
-    state:                      absent
-    release_on_disassociation:  yes
-  loop: "{{ r_all_workshop_eips.results }}"
 
 - name: destroy EC2 instances
   ec2:
@@ -46,6 +38,15 @@
     wait_timeout:   300
   register: result
   when: all_workshop_nodes.instances
+
+- name: Forcibly delete EIPs after destroying instances
+  ec2_eip:
+    #    device_id:                  "{{ item.item['instance_id'] }}"
+    ip:                  "{{ item.item['public_ip_address'] }}"
+    region:                     "{{ ec2_region }}"
+    state:                      absent
+    release_on_disassociation:  yes
+  loop: "{{ r_all_workshop_eips.results }}"
 
 - name: Get the VPC ID for {{ ec2_name_prefix }}
   ec2_vpc_net_facts:
