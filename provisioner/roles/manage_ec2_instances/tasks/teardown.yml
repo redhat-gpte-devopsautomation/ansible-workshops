@@ -12,6 +12,13 @@
     var: all_workshop_nodes
     verbosity: 2
 
+- name: DEBUG ec2_instance register
+  include_role:
+    name: output-json-file
+  vars:  
+    output_file:      /tmp/ec2-instance-facts-foundations.json
+    input_json:       "{{ all_workshop_nodes }}"
+
 - name: Get ec2 eip facts for workshop
   ec2_eip_facts:
     region: "{{ ec2_region }}"
@@ -20,6 +27,14 @@
       instance-id: "{{ item['instance_id'] }}"
   loop: "{{ all_workshop_nodes.instances }}"    
   register: r_all_workshop_eips
+
+- name: DEBUG ec2_eip register
+  include_role:
+    name: output-json-file
+  vars:  
+    output_file:      /tmp/ec2-eip.json
+    input_json:       "{{ r_all_workshop_eips }}"
+
 
 - name: destroy EC2 instances
   ec2:
@@ -33,11 +48,12 @@
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
-    #    device_id:                  "{{ item.item['instance_id'] }}"
+    #device_id:                  "{{ item.item['instance_id'] }}"
     ip:                  "{{ item.item['public_ip_address'] }}"
     region:                     "{{ ec2_region }}"
     state:                      absent
     release_on_disassociation:  yes
+  ignore_errors:              yes
   loop: "{{ r_all_workshop_eips.results }}"
 
 - name: Get the VPC ID for {{ ec2_name_prefix }}
