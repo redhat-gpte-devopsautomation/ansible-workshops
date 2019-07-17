@@ -12,12 +12,12 @@
     var: all_workshop_nodes
     verbosity: 2
 
-- name: DEBUG ec2_instance register
-  include_role:
-    name: output-json-file
-  vars:  
-    output_file:      /tmp/ec2-instance-facts-foundations.json
-    input_json:       "{{ all_workshop_nodes }}"
+#- name: DEBUG ec2_instance register
+#  include_role:
+#    name: output-json-file
+#  vars:  
+#    output_file:      /tmp/ec2-instance-facts-foundations.json
+#    input_json:       "{{ all_workshop_nodes }}"
 
 - name: Get ec2 eip facts for workshop
   ec2_eip_facts:
@@ -28,13 +28,12 @@
   loop: "{{ all_workshop_nodes.instances }}"    
   register: r_all_workshop_eips
 
-- name: DEBUG ec2_eip register
-  include_role:
-    name: output-json-file
-  vars:  
-    output_file:      /tmp/ec2-eip.json
-    input_json:       "{{ r_all_workshop_eips }}"
-
+#- name: DEBUG ec2_eip register
+#  include_role:
+#    name: output-json-file
+#  vars:  
+#    output_file:      /tmp/ec2-eip.json
+#    input_json:       "{{ r_all_workshop_eips }}"
 
 - name: destroy EC2 instances
   ec2:
