@@ -1,0 +1,4 @@
+---
+input_json:     my_json
+output_file:    /tmp/my_register.json
+...
