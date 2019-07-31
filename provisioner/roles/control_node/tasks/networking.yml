@@ -15,9 +15,9 @@
 #     remote_src: yes
 #   when: networking
 #
-- name: Move networking workshop folder to correct location  (NETWORKING MODE SPECIAL)
-  command: cp -r /tmp/linklight/exercises/networking_v2/ /home/{{ username }}/networking-workshop/
-  when: networking | bool
+#- name: Move networking workshop folder to correct location  (NETWORKING MODE SPECIAL)
+#  command: cp -r /tmp/linklight/exercises/networking_v2/ /home/{{ username }}/networking-workshop/
+#  when: networking | bool
 
 # This is waiting on https://github.com/ansible/ansible/pull/41222
 # which will become available on ansible 2.8
