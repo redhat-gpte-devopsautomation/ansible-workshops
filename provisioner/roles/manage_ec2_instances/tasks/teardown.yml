@@ -36,12 +36,12 @@
 #    input_json:       "{{ r_all_workshop_eips }}"
 
 - name: destroy EC2 instances
-  ec2:
+  ec2_instance:
     region:         "{{ ec2_region }}"
     instance_ids:   "{{ all_workshop_nodes.instances | map(attribute='instance_id') | list }}"
     state:          absent
     wait:           yes
-    wait_timeout:   300
+    wait_timeout:   600
   register: result
   when: all_workshop_nodes.instances
 
