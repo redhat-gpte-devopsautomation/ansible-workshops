@@ -47,11 +47,11 @@
 
 - name: Forcibly delete EIPs after destroying instances
   ec2_eip:
-    #device_id:                  "{{ item.item['instance_id'] }}"
-    ip:                  "{{ item.item['public_ip_address'] }}"
-    region:                     "{{ ec2_region }}"
-    state:                      absent
-    release_on_disassociation:  yes
+    #device_id:                   "{{ item.item['instance_id'] }}"
+    ip:                           "{{ item.item['public_ip_address'] }}"
+    region:                       "{{ ec2_region }}"
+    state:                        absent
+    release_on_disassociation:    yes
   ignore_errors:              yes
   loop: "{{ r_all_workshop_eips.results }}"
 
