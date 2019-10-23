@@ -1,10 +1,11 @@
 - name: INSTALL CERTBOT
   yum:
     name: certbot
-    # enablerepo: "rhui-REGION-rhel-server-extras,rhui-REGION-rhel-server-optional"
 
+    # enablerepo: "rhui-REGION-rhel-server-extras,rhui-REGION-rhel-server-optional"
     # impacted by aws changes    
 #https://docs.ansible.com/ansible-tower/latest/html/administration/init_script.html
+#
 - name: TURN OFF TOWER
   shell: ansible-tower-service stop
 
@@ -52,4 +53,4 @@
     tower_verify_ssl: no
     tower_host: localhost
     tower_username: admin
-    tower_password: "{{admin_password}}"
+    tower_password: "{{ admin_password }}"

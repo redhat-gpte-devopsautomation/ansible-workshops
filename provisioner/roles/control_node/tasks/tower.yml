@@ -19,9 +19,9 @@
     dest: /tmp/tower_install/inventory
 
 - name: run the Ansible Tower installer
-  command: "./setup.sh --extra-vars='{\"redhat_aws_rhui_repo\": [\"rhel-7-server-rhui-extras-rpms\", \"rhel-server-rhui-rhscl-7-rpms\"]}'"
-   args:
-     chdir: /tmp/tower_install
+  shell: ./setup.sh 
+  args:
+    chdir: /tmp/tower_install
   async: 900
   poll: 10
 
