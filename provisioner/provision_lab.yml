@@ -191,13 +191,13 @@
 - name: include workshop_type unique setup roles
   import_playbook: "{{workshop_type}}.yml"
 
-- name: Alert the mothership
-  hosts: localhost
-  connection: local
-  become: no
-  gather_facts: no
-  tasks:
-    - { include_role: {name: tower_request}, when: student_total > 9 }
+#- name: Alert the mothership
+#  hosts: localhost
+#  connection: local
+#  become: no
+#  gather_facts: no
+#  tasks:
+#    - { include_role: {name: tower_request}, when: student_total > 9 }
 
 - name: print out information for instructor
   hosts: localhost
