@@ -74,6 +74,7 @@
       Linklight: "This was provisioned through the linklight provisioner"
       Students: "{{student_total}}"
       short_name: "ansible"
+      guid: "{{ ec2_name_prefix }}"
   with_indexed_items:
     - "{{ control_output.instance_ids }}"
   when: control_output.instance_ids is not none
