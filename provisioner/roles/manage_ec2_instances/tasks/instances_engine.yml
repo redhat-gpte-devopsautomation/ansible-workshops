@@ -61,6 +61,7 @@
       Linklight: "This was provisioned through the linklight provisioner"
       Students: "{{student_total}}"
       short_name: "node1"
+      guid: "{{ ec2_name_prefix }}"
   with_indexed_items:
     - "{{ node1_output.instance_ids }}"
   when: node1_output.instance_ids is not none
@@ -121,6 +122,7 @@
       Linklight: "This was provisioned through the linklight provisioner"
       Students: "{{student_total}}"
       short_name: "node2"
+      guid: "{{ ec2_name_prefix }}"
   with_indexed_items:
     - "{{ node2_output.instance_ids }}"
   when: node2_output.instance_ids is not none
@@ -181,6 +183,7 @@
       Linklight: "This was provisioned through the linklight provisioner"
       Students: "{{student_total}}"
       short_name: "node3"
+      guid: "{{ ec2_name_prefix }}"
   with_indexed_items:
     - "{{ node3_output.instance_ids }}"
   when: node3_output.instance_ids is not none
